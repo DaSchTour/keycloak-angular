@@ -24,9 +24,10 @@ import { KeycloakFeature } from './features/keycloak.feature';
  */
 export type ProvideKeycloakOptions = {
   /**
-   * Keycloak configuration, including the server URL, realm, and client ID.
+   * Keycloak configuration (including the server URL, realm, and client ID),
+   * or a string representing the URL/path to a JSON configuration file.
    */
-  config: KeycloakConfig;
+  config: KeycloakConfig | string;
 
   /**
    * Optional initialization options for the Keycloak instance.
@@ -82,7 +83,7 @@ const provideKeycloakInAppInitializer = (
  * In such cases, the application must call `keycloak.init()` explicitly.
  *
  * @param options - Configuration object for Keycloak:
- *   - `config`: The Keycloak configuration, including the server URL, realm, and client ID.
+ *   - `config`: The Keycloak configuration (including the server URL, realm, and client ID) or a string representing the URL/path to a JSON configuration file.
  *   - `initOptions` (Optional): Initialization options for the Keycloak instance.
  *   - `providers` (Optional): Additional Angular providers to include.
  *   - `features` (Optional): Keycloak Angular features to configure during initialization.
@@ -90,8 +91,9 @@ const provideKeycloakInAppInitializer = (
  * @returns An `EnvironmentProviders` object integrating Keycloak setup and additional providers.
  *
  * @example
+ * Configuring Keycloak with a configuration object:
  * ```ts
- * import { provideKeycloak } from './keycloak.providers';
+ * import { provideKeycloak } from 'keycloak-angular';
  * import { bootstrapApplication } from '@angular/platform-browser';
  * import { AppComponent } from './app/app.component';
  *
@@ -103,6 +105,25 @@ const provideKeycloakInAppInitializer = (
  *         realm: 'my-realm',
  *         clientId: 'my-client',
  *       },
+ *       initOptions: {
+ *         onLoad: 'login-required',
+ *       },
+ *     }),
+ *   ],
+ * });
+ * ```
+ *
+ * @example
+ * Configuring Keycloak with a string URL path (loaded from a JSON file):
+ * ```ts
+ * import { provideKeycloak } from 'keycloak-angular';
+ * import { bootstrapApplication } from '@angular/platform-browser';
+ * import { AppComponent } from './app/app.component';
+ *
+ * bootstrapApplication(AppComponent, {
+ *   providers: [
+ *     provideKeycloak({
+ *       config: '/keycloak.json',
  *       initOptions: {
  *         onLoad: 'login-required',
  *       },
